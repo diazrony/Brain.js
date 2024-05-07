@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice neural Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.min.js" integrity="sha512-qFhMEJrjI50TwLDGZ7Oi0ksTSWnFOqTNXhlqqUgWnE65S23rWUtQOv+tMNEybkMYSXKgAc3eg/SzkX+qrtJT/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brain.js/2.0.0-beta.1/brain-browser.js"></script>
+    <style>
+        #neural {
+            padding: 5rem;
+            margin: 5rem;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <input onInput="update(this.jscolor)" value="CCFFAA" data-jscolor="{alpha:1}">
+
+    <div id="neural" >
+        Neural Network
+    </div>
+</body>
+    <script>
+        // Initial neural network
+        const network = new brain.NeuralNetwork();
+
+        network.train([
+            //Fondo negro - Texto blanco
+            {input:{ red: 0, green:0, blue:0 }, output:{color:1}},
+            //Fondo blanco - Texto negro
+            {input:{ red: 1, green:1, blue:1 }, output:{color:0}}
+        ]);
+
+        function update(picker) {
+
+            let div = document.getElementById('neural');
+
+            div.style.background = picker.toBackground();
+
+            let rgb = picker.toRGBString().match(/\d+(\.\d+)?/g).map(Number);
+
+            let input = {
+                red: rgb[0]/255,
+                green: rgb[1]/255,
+                blue: rgb[2]/255
+            };
+
+            let result = network.run(input);
+
+            if (result.color > 0.5) {
+                div.style.color = '#FFFFFF';
+            } else {
+                div.style.color = '#000000';
+            }
+
+        }
+    </script>
+</html>
